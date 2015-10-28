@@ -35,6 +35,18 @@ router.post('/', function(req, res, next) {
     .done();
 });
 
+router.delete('/:id', function (req, res, next) {
+    Ship.findByIdAndRemoveQ(req.params.id)
+
+    .then(function(result) {
+        res.json(result);
+    })
+    .catch(function(err) {
+        res.send(err);
+    });
+});
+
+
 
 
 

@@ -5,20 +5,20 @@ var Ship = require('../models/ships');
 var mongoose = require('mongoose-q')(require('mongoose'));
 
 router.get('/', function(req, res, next) {
-  User.find(function(err,response){
-      if(err){
-        res.json({message:err});
-      } else{
+    User.findQ()
+    .then(function(response) {
         res.json(response);
-      }
-  });
+    })
+    .catch (function(err) {
+        res.send({"ERROR": err});
+    });
 
 });
 
 //save a new user
 router.post('/', function(req, res, next) {
     var newUser = new User({
-      name:req.body.name
+      name:req.body.username
     });
     console.log(req.body.name);
     newUser.saveQ()
@@ -63,6 +63,18 @@ router.get('/:userid/ships', function(req, res, next) {
         }
     });
 });
+
+router.delete('/:userid/ships/:shipid', function (req, res, next) {
+    console.log(req.params.shipid)
+    Ship.findByIdAndRemove(req.params.shipid)
+    .then(function (response) {
+        res.json(response);
+    })
+    .catch(function(err) {
+        res.json(err);
+    });
+});
+
 
 
 module.exports = router;
