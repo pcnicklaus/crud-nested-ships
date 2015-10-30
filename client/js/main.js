@@ -1,6 +1,6 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['ngRoute','ngResource']);
 
-app.controller('mainController', ['$scope', '$http', function ($scope, $http) {
+app.controller('mainController', ['$scope', '$http', 'idService', function ($scope, $http, idService) {
 
   $scope.getUsers = function () {
     $http.get('/users')
@@ -24,6 +24,26 @@ app.controller('mainController', ['$scope', '$http', function ($scope, $http) {
       .catch(function(error) {
         console.log(error);
     });
+  };
+
+  $scope.getSingleUser = function (data) {
+    idService.name = data._id;
+  };
+
+
+  $scope.addShip = function () {
+
+    var id = idService.id;
+    var payload = {
+      name: $scope.name,
+      missions: $scope.mission
+    };
+
+    $http.post('users/'+ id +'/ships', payload)
+      .then (function (response) {
+        console.log(response);
+      });
+
   };
 
 

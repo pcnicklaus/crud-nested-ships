@@ -5,12 +5,14 @@ var Ship = require('../models/ships');
 var mongoose = require('mongoose-q')(require('mongoose'));
 
 router.get('/', function(req, res, next) {
-    User.findQ()
-    .then(function(response) {
-        res.json(response);
-    })
-    .catch (function(err) {
-        res.send({"ERROR": err});
+    User.find()
+    .populate('ships')
+    .exec(function(err, user) {
+        if(err) {
+            res.send(err);
+        } else {
+            res.json(user);
+        }
     });
 
 });
